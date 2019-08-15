@@ -1,3 +1,5 @@
+package jsonparser;
+
 public class JsonToken {
 	public String token;
 	public String text;

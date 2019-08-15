@@ -1,3 +1,5 @@
+package jsonparser;
+
 public class JsonString extends JsonElement {
 	public String value;
 

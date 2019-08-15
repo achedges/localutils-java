@@ -1,3 +1,5 @@
+package jsonparser;
+
 public class JsonBoolean extends JsonElement {
 	public boolean value;
 

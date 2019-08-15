@@ -1,3 +1,5 @@
+package jsonparser;
+
 public class JsonInteger extends JsonElement {
 	public int value;
 

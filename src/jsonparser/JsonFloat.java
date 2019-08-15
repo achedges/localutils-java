@@ -1,3 +1,5 @@
+package jsonparser;
+
 public class JsonFloat extends JsonElement {
 	public double value;
 
