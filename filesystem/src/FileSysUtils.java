@@ -71,10 +71,10 @@ public class FileSysUtils {
 		}
 	}
 
-	public static void extractFile(String archivePath, String extractPath, boolean autoClean) {
+	public static void extractFile(String archiveFile, String extractPath, boolean autoClean) {
 		try {
 			byte[] buffer = new byte[1024];
-			ZipInputStream zipfile = new ZipInputStream(new FileInputStream(archivePath));
+			ZipInputStream zipfile = new ZipInputStream(new FileInputStream(archiveFile));
 			ZipEntry entry;
 
 			while ((entry = zipfile.getNextEntry()) != null) {
@@ -93,7 +93,7 @@ public class FileSysUtils {
 			zipfile.close();
 
 			if (autoClean)
-				FileSysUtils.deleteFile(archivePath);
+				FileSysUtils.deleteFile(archiveFile);
 		}
 		catch (IOException ioex) {
 			System.out.println(ioex.getMessage());
