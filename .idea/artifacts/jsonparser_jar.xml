@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="jsonparser:jar">
+    <output-path>/usr/local/lib/localutils/jars</output-path>
+    <root id="archive" name="jsonparser.jar">
+      <element id="module-output" name="jsonparser" />
+    </root>
+  </artifact>
+</component>
