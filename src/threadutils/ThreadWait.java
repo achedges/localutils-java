@@ -1,15 +1,15 @@
 package threadutils;
 
-public class ThreadUtils {
+public class ThreadWait {
 
 	private long waitValue;
 	private int multiplier; // 1 = linear, 2 = exponential
 
-	public ThreadUtils() {
+	public ThreadWait() {
 		waitValue = 100;
 		multiplier = 2;
 	}
-	public ThreadUtils(long initialMilliseconds, int multiplier) {
+	public ThreadWait(long initialMilliseconds, int multiplier) {
 		this.waitValue = initialMilliseconds;
 		this.multiplier = multiplier;
 	}
