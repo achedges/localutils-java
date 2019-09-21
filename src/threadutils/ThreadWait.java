@@ -2,8 +2,8 @@ package threadutils;
 
 public class ThreadWait {
 
-	private long waitValue;
-	private int multiplier; // 1 = linear, 2 = exponential
+	public long waitValue;
+	public int multiplier; // 1 = linear, 2 = exponential
 
 	public ThreadWait() {
 		waitValue = 100;
