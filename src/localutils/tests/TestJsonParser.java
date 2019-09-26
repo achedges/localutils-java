@@ -1,4 +1,6 @@
-import jsonparser.*;
+package localutils.tests;
+
+import localutils.json.*;
 import org.junit.Assert;
 import org.junit.Test;
 

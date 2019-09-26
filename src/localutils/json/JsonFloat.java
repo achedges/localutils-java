@@ -1,4 +1,4 @@
-package jsonparser;
+package localutils.json;
 
 public class JsonFloat extends JsonElement {
 	public double value;

@@ -1,4 +1,4 @@
-package jsonparser;
+package localutils.json;
 
 public class JsonInteger extends JsonElement {
 	public int value;

@@ -1,4 +1,4 @@
-package filesystem;
+package localutils.filesystem;
 
 import java.io.*;
 import java.net.URL;
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class FileSysUtils {
+public class FileSystemUtilities {
 
 	public static List<String> listFiles(String folder) {
 		List<String> ret = new ArrayList<>();
@@ -29,11 +29,11 @@ public class FileSysUtils {
 	}
 
 	public static void deleteFile(String path) {
-		FileSysUtils._deleteFileOrFolder(path);
+		FileSystemUtilities._deleteFileOrFolder(path);
 	}
 
 	public static void deleteFolder(String path) {
-		FileSysUtils._deleteFileOrFolder(path);
+		FileSystemUtilities._deleteFileOrFolder(path);
 	}
 
 	public static boolean fileExists(String path) {
@@ -95,7 +95,7 @@ public class FileSysUtils {
 			zipfile.close();
 
 			if (autoClean)
-				FileSysUtils.deleteFile(archiveFile);
+				FileSystemUtilities.deleteFile(archiveFile);
 		}
 		catch (IOException ioex) {
 			System.out.println(ioex.getMessage());

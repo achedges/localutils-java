@@ -1,4 +1,4 @@
-package jsonparser;
+package localutils.json;
 
 public class JsonBoolean extends JsonElement {
 	public boolean value;

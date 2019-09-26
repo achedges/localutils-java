@@ -1,4 +1,4 @@
-package jsonparser;
+package localutils.json;
 
 public class JsonNull extends JsonElement {
 	@Override

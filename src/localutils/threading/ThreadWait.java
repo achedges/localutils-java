@@ -1,4 +1,4 @@
-package threadutils;
+package localutils.threading;
 
 public class ThreadWait {
 

@@ -1,10 +1,10 @@
-package decimalutils;
+package localutils.decimal;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
-public class DecimalUtils {
+public class DecimalUtilities {
 
 	public static double truncate(double input, int scale) {
 		return BigDecimal.valueOf(input).setScale(scale, RoundingMode.HALF_UP).doubleValue();

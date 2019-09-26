@@ -1,4 +1,4 @@
-package jsonparser;
+package localutils.json;
 
 import java.util.*;
 
