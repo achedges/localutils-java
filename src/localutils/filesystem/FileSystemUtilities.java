@@ -68,8 +68,8 @@ public class FileSystemUtilities {
 			filestream.close();
 			urlreq.close();
 		}
-		catch (IOException ioex) {
-			System.out.println(ioex.getMessage());
+		catch (Exception ex) {
+			System.out.println(ex.getMessage());
 		}
 	}
 
