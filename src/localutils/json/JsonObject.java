@@ -1,6 +1,7 @@
 package localutils.json;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class JsonObject extends JsonElement {
@@ -40,5 +41,9 @@ public class JsonObject extends JsonElement {
 
 	public void set(String key, JsonElement value) {
 		this.objectTreeMap.put(key, value);
+	}
+
+	public Set<String> getKeys() {
+		return this.objectTreeMap.keySet();
 	}
 }

@@ -7,6 +7,9 @@ import org.junit.Test;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TestJsonParser {
 	@Test
@@ -29,22 +32,15 @@ public class TestJsonParser {
 
 			JsonObject innerobj = (JsonObject)object.get("object");
 
-			Assert.assertTrue("'string' identifier not found", innerobj.contains("string"));
+			Set<String> keySet = new HashSet<>(Arrays.asList("string", "int", "float", "bool", "null", "list"));
+			Assert.assertEquals("Unexpected keyset", keySet, innerobj.getKeys());
+
 			Assert.assertEquals("Incorrect value for key 'string'", "\"stringvalue\"", innerobj.get("string").serialize(0));
-
-			Assert.assertTrue("'int' identifier not found", innerobj.contains("int"));
 			Assert.assertEquals("Incorrect value for key 'int'", "1", innerobj.get("int").serialize(0));
-
-			Assert.assertTrue("'float' identifier not found", innerobj.contains("float"));
 			Assert.assertEquals("Incorrect value for key 'float'", "1.123", innerobj.get("float").serialize(0));
-
-			Assert.assertTrue("'bool' identifier not found", innerobj.contains("bool"));
 			Assert.assertEquals("Incorrect value for key 'bool'", "true", innerobj.get("bool").serialize(0));
-
-			Assert.assertTrue("'null' identifier not found", innerobj.contains("null"));
 			Assert.assertEquals("Incorrect value for key 'null'", "null", innerobj.get("null").serialize(0));
 
-			Assert.assertTrue("'list' identifier not found", innerobj.contains("list"));
 			Assert.assertTrue("Incorrect list object value type", innerobj.get("list") instanceof JsonList);
 
 			JsonList innerlst = (JsonList)innerobj.get("list");
