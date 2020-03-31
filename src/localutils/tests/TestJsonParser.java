@@ -4,57 +4,66 @@ import localutils.json.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class TestJsonParser {
 	@Test
-	public void testParser() {
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader("parse.json"));
-			StringBuilder jsonInput = new StringBuilder();
-			String line;
+	public void testObjectParser() throws Exception {
+		String testContents = new String(Files.readAllBytes(Paths.get("parse-obj.json")));
+		JsonParser parser = new JsonParser(testContents);
+		JsonElement result = parser.parse();
 
-			while ((line = reader.readLine()) != null)
-				jsonInput.append(line);
+		Assert.assertTrue("Result should be a JsonObject", result instanceof JsonObject);
 
-			JsonParser parser = new JsonParser(jsonInput.toString());
-			JsonObject object = parser.parse();
+		JsonObject object = (JsonObject)result;
 
-			Assert.assertEquals("Incorrect main object size", 1, object.getObjectSize()); // should contain a single overall object
-			Assert.assertTrue("'object' identifier not found", object.contains("object"));
+		Assert.assertEquals("Incorrect main object size", 1, object.getObjectSize()); // should contain a single overall object
+		Assert.assertTrue("'object' identifier not found", object.contains("object"));
 
-			Assert.assertTrue("Incorrect main object value type", object.get("object") instanceof JsonObject);
+		Assert.assertTrue("Incorrect main object value type", object.get("object") instanceof JsonObject);
 
-			JsonObject innerobj = (JsonObject)object.get("object");
+		JsonObject innerobj = (JsonObject)object.get("object");
 
-			Set<String> keySet = new HashSet<>(Arrays.asList("string", "int", "float", "bool", "null", "list"));
-			Assert.assertEquals("Unexpected keyset", keySet, innerobj.getKeys());
+		Set<String> keySet = new HashSet<>(Arrays.asList("string", "int", "float", "bool", "null", "list"));
+		Assert.assertEquals("Unexpected keyset", keySet, innerobj.getKeys());
 
-			Assert.assertEquals("Incorrect value for key 'string'", "\"stringvalue\"", innerobj.get("string").serialize(0));
-			Assert.assertEquals("Incorrect value for key 'int'", "1", innerobj.get("int").serialize(0));
-			Assert.assertEquals("Incorrect value for key 'float'", "1.123", innerobj.get("float").serialize(0));
-			Assert.assertEquals("Incorrect value for key 'bool'", "true", innerobj.get("bool").serialize(0));
-			Assert.assertEquals("Incorrect value for key 'null'", "null", innerobj.get("null").serialize(0));
+		Assert.assertEquals("Incorrect value for key 'string'", "\"stringvalue\"", innerobj.get("string").serialize(0));
+		Assert.assertEquals("Incorrect value for key 'int'", "1", innerobj.get("int").serialize(0));
+		Assert.assertEquals("Incorrect value for key 'float'", "1.123", innerobj.get("float").serialize(0));
+		Assert.assertEquals("Incorrect value for key 'bool'", "true", innerobj.get("bool").serialize(0));
+		Assert.assertEquals("Incorrect value for key 'null'", "null", innerobj.get("null").serialize(0));
 
-			Assert.assertTrue("Incorrect list object value type", innerobj.get("list") instanceof JsonList);
+		Assert.assertTrue("Incorrect list object value type", innerobj.get("list") instanceof JsonList);
 
-			JsonList innerlst = (JsonList)innerobj.get("list");
-			Assert.assertEquals("Incorrect size of list", 3, innerlst.getListSize());
-			Assert.assertEquals("Incorrect list element 1", "\"one\"", innerlst.get(0).serialize(0));
-			Assert.assertEquals("Incorrect list element 2", "\"two\"", innerlst.get(1).serialize(0));
+		JsonList innerlst = (JsonList)innerobj.get("list");
+		Assert.assertEquals("Incorrect size of list", 3, innerlst.getListSize());
+		Assert.assertEquals("Incorrect list element 1", "\"one\"", innerlst.get(0).serialize(0));
+		Assert.assertEquals("Incorrect list element 2", "\"two\"", innerlst.get(1).serialize(0));
 
-			Assert.assertEquals("Incorrect list element 3", "\"\\\"three\\\"\"", innerlst.get(2).serialize(0));
-		}
-		catch (IOException ioex) {
-			System.out.println("IO Exception: " + ioex.getMessage());
-		}
-		catch (Exception ex) {
-			System.out.println("Exception: " + ex.getMessage());
+		Assert.assertEquals("Incorrect list element 3", "\"\\\"three\\\"\"", innerlst.get(2).serialize(0));
+	}
+
+	@Test
+	public void testListParser() throws Exception {
+		String testContents = new String(Files.readAllBytes(Paths.get("parse-list.json")));
+		JsonParser parser = new JsonParser(testContents);
+		JsonElement result = parser.parse();
+
+		Assert.assertTrue("Result object should be an array", result instanceof JsonList);
+
+		JsonList list = (JsonList)result;
+		Assert.assertEquals("Result list size is incorrect", 2, list.getListSize());
+
+		Set<String> keySet = new HashSet<>(Arrays.asList("key", "value"));
+		for (int i = 0; i < list.getListSize(); i++) {
+			JsonObject obj = (JsonObject)list.get(i);
+			Assert.assertEquals("Unexpected key set, item " + i, keySet, obj.getKeys());
+			Assert.assertEquals("Unexpected value", "\"some-key-" + i + "\"", obj.get("key").serialize(0));
+			Assert.assertEquals("Unexpected value", "\"some-value-" + i + "\"", obj.get("value").serialize(0));
 		}
 	}
 

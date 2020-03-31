@@ -9,19 +9,23 @@ public class JsonParser {
 	private ArrayList<JsonToken> stream = new ArrayList<>();
 
 	public JsonParser(String jsonString) {
-		this.input = jsonString.trim();
-		this.n = this.input.length();
-		this.i = 0;
+		input = jsonString.trim();
+		n = input.length();
+		i = 0;
 	}
 
-	public JsonObject parse() throws Exception {
-		this.tokenizeInput();
-		this.i = 0;
+	public JsonElement parse() throws Exception {
+		tokenizeInput();
+		i = 0;
 
-		if (!this.stream.get(0).token.equals("{"))
-			throw new Exception("JSON documents must start with '{'");
+		if (stream.get(0).token.equals("{"))
+			return parseObject();
 
-		return this.parseObject();
+		else if (stream.get(0).token.equals("["))
+			return parseList();
+
+		else
+			throw new Exception("JSON documents must start with '{' or '['");
 	}
 
 	private void tokenizeInput() {
@@ -29,62 +33,62 @@ public class JsonParser {
 		HashSet<Character> _TK = new HashSet<>(Arrays.asList('{', '}', '[', ']', ',', ':'));
 		HashSet<Character> _LT = new HashSet<>(Arrays.asList(',', ']', '}'));
 
-		while (this.input.charAt(this.i) != '{')
-			this.i++;
+		while (input.charAt(i) != '{' && input.charAt(i) != '[')
+			i++;
 
-		while (this.i < this.n) {
-			if (_WS.contains(this.input.charAt(this.i))) {
-				this.i++;
+		while (i < n) {
+			if (_WS.contains(input.charAt(i))) {
+				i++;
 				continue;
 			}
 
-			else if (_TK.contains(this.input.charAt(this.i)))
-				this.stream.add(new JsonToken(String.valueOf(this.input.charAt(this.i)), String.valueOf(this.input.charAt(this.i))));
+			else if (_TK.contains(input.charAt(i)))
+				stream.add(new JsonToken(String.valueOf(input.charAt(i)), String.valueOf(input.charAt(i))));
 
-			else if (this.input.charAt(this.i) == '"') {
+			else if (input.charAt(i) == '"') {
 				StringBuilder id = new StringBuilder();
-				this.i++;
-				while (this.i < this.n) {
-					if (this.input.charAt(this.i) == '"' && this.input.charAt(this.i - 1) != '\\')
+				i++;
+				while (i < n) {
+					if (input.charAt(i) == '"' && input.charAt(i - 1) != '\\')
 						break;
 
-					else if (this.input.charAt(this.i) == '"' && this.input.charAt(this.i - 1) == '\\')
+					else if (input.charAt(i) == '"' && input.charAt(i - 1) == '\\')
 						id.setCharAt(id.length() - 1, '"');
 
 					else
-						id.append(this.input.charAt(this.i));
+						id.append(input.charAt(i));
 
-					this.i++;
+					i++;
 				}
 
-				this.stream.add(new JsonToken("ID", id.toString()));
+				stream.add(new JsonToken("ID", id.toString()));
 			}
 
 			else {
 				StringBuilder lit = new StringBuilder();
-				while (this.i < this.n) {
-					if (_LT.contains(this.input.charAt(this.i))) {
-						this.i--; // back-up so we can capture the ending token in the stream
+				while (i < n) {
+					if (_LT.contains(input.charAt(i))) {
+						i--; // back-up so we can capture the ending token in the stream
 						break;
 					}
-					else if (!_WS.contains(this.input.charAt(this.i))) {
-						lit.append(this.input.charAt(this.i));
+					else if (!_WS.contains(input.charAt(i))) {
+						lit.append(input.charAt(i));
 					}
 
-					this.i++;
+					i++;
 				}
 
-				this.stream.add(new JsonToken("LIT", lit.toString()));
+				stream.add(new JsonToken("LIT", lit.toString()));
 			}
 
-			this.i++;
+			i++;
 		}
 	}
 
 	private JsonToken nextToken() {
-		this.i++;
-		if (this.i < this.stream.size())
-			return this.stream.get(this.i);
+		i++;
+		if (i < stream.size())
+			return stream.get(i);
 		else
 			return new JsonToken("EOF", "EOF");
 	}
@@ -104,7 +108,7 @@ public class JsonParser {
 
 	private JsonList parseList() throws Exception {
 		JsonList list = new JsonList();
-		JsonToken token = this.nextToken();
+		JsonToken token = nextToken();
 		while (!token.token.equals("]")) {
 			switch (token.token) {
 				case "ID":
@@ -114,14 +118,14 @@ public class JsonParser {
 					list.add(JsonParser.parseLiteral(token.text));
 					break;
 				case "{":
-					list.add(this.parseObject());
+					list.add(parseObject());
 					break;
 				case "[":
-					list.add(this.parseList());
+					list.add(parseList());
 					break;
 			}
 
-			token = this.nextToken();
+			token = nextToken();
 			if (token.token.equals("EOF"))
 				break;
 		}
@@ -131,14 +135,14 @@ public class JsonParser {
 
 	private JsonObject parseObject() throws Exception {
 		JsonObject obj = new JsonObject();
-		JsonToken key = this.nextToken();
+		JsonToken key = nextToken();
 
 		while (!key.token.equals("}")) {
 			if (key.token.equals(","))
-				key = this.nextToken();
+				key = nextToken();
 
-			JsonToken separator = this.nextToken();
-			JsonToken value = this.nextToken();
+			JsonToken separator = nextToken();
+			JsonToken value = nextToken();
 
 			if (!key.token.equals("ID"))
 				throw new Exception(String.format("Invalid token detected for object key: %s", key.token));
@@ -147,10 +151,10 @@ public class JsonParser {
 
 			switch (value.token) {
 				case "{":
-					obj.set(key.text, this.parseObject());
+					obj.set(key.text, parseObject());
 					break;
 				case "[":
-					obj.set(key.text, this.parseList());
+					obj.set(key.text, parseList());
 					break;
 				case "ID":
 					obj.set(key.text, new JsonString(value.text));
@@ -162,7 +166,7 @@ public class JsonParser {
 					throw new Exception(String.format("Unknown value token: %s", value.token));
 			}
 
-			key = this.nextToken();
+			key = nextToken();
 		}
 
 		return obj;
