@@ -37,6 +37,8 @@ public class TestJsonParser {
 		Assert.assertEquals("Incorrect value for key 'bool'", "true", innerobj.get("bool").serialize(0));
 		Assert.assertEquals("Incorrect value for key 'null'", "null", innerobj.get("null").serialize(0));
 
+		Assert.assertEquals("Incorrect int/float conversion", 1.0, ((JsonFloat)innerobj.get("int")).value, 0);
+
 		Assert.assertTrue("Incorrect list object value type", innerobj.get("list") instanceof JsonList);
 
 		JsonList innerlst = (JsonList)innerobj.get("list");
