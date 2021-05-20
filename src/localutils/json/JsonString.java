@@ -11,4 +11,9 @@ public class JsonString extends JsonElement {
 	public String serialize(int indent) {
 		return String.format("\"%s\"", this.value.replace("\"", "\\\""));
 	}
+
+	@Override
+	public JsonString getStringValue() {
+		return this;
+	}
 }

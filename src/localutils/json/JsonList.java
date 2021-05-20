@@ -26,6 +26,11 @@ public class JsonList extends JsonElement {
 		return ret.toString();
 	}
 
+	@Override
+	public JsonList getListValue() {
+		return this;
+	}
+
 	public int getListSize() {
 		return this.list.size();
 	}
