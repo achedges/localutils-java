@@ -27,6 +27,11 @@ public class JsonObject extends JsonElement {
 		return ret.toString();
 	}
 
+	@Override
+	public JsonObject getObjectValue() {
+		return this;
+	}
+
 	public int getObjectSize() {
 		return this.objectTreeMap.size();
 	}

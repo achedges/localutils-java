@@ -11,4 +11,9 @@ public class JsonBoolean extends JsonElement {
 	public String serialize(int indent) {
 		return this.value ? "true" : "false";
 	}
+
+	@Override
+	public JsonBoolean getBoolValue() {
+		return this;
+	}
 }
