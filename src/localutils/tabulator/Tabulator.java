@@ -5,10 +5,15 @@ import java.util.List;
 
 public class Tabulator {
 
-	private ArrayList<ColumnDefinition> columnDefinitions;
+	private final ArrayList<ColumnDefinition> columnDefinitions;
 
 	public Tabulator() {
 		columnDefinitions = new ArrayList<>();
+	}
+
+	public Tabulator(String... columnNames) {
+		columnDefinitions = new ArrayList<>();
+		for (String name : columnNames) addColumn(name);
 	}
 
 	public void addColumn(String name) {
