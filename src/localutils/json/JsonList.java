@@ -27,7 +27,7 @@ public class JsonList extends JsonElement {
 	}
 
 	@Override
-	public JsonList getListValue() {
+	public JsonList getListElement() {
 		return this;
 	}
 

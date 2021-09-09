@@ -2,29 +2,19 @@ package localutils.json;
 
 public abstract class JsonElement {
 
-	public JsonInteger getIntValue() {
-		return null;
-	}
+	// JsonElement getters
+	public JsonInteger getIntElement() { return null; }
+	public JsonFloat getFloatElement() { return null; }
+	public JsonString getStringElement() { return null; }
+	public JsonList getListElement() { return null; }
+	public JsonObject getObjectElement() { return null; }
+	public JsonBoolean getBoolElement() { return null; }
 
-	public JsonFloat getFloatValue() {
-		return null;
-	}
-
-	public JsonString getStringValue() {
-		return null;
-	}
-
-	public JsonList getListValue() {
-		return null;
-	}
-
-	public JsonObject getObjectValue() {
-		return null;
-	}
-
-	public JsonBoolean getBoolValue() {
-		return null;
-	}
+	// Value getters
+	public Integer getInt() { return null; }
+	public Double getDouble() { return null; }
+	public String getString() { return null; }
+	public Boolean getBool() { return null; }
 
 	public abstract String serialize(int indent);
 }

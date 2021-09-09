@@ -19,14 +19,14 @@ public class TestJsonParser {
 
 		Assert.assertTrue("Result should be a JsonObject", result instanceof JsonObject);
 
-		JsonObject object = result.getObjectValue();
+		JsonObject object = result.getObjectElement();
 
 		Assert.assertEquals("Incorrect main object size", 1, object.getObjectSize()); // should contain a single overall object
 		Assert.assertTrue("'object' identifier not found", object.contains("object"));
 
 		Assert.assertTrue("Incorrect main object value type", object.get("object") instanceof JsonObject);
 
-		JsonObject innerobj = object.get("object").getObjectValue();
+		JsonObject innerobj = object.get("object").getObjectElement();
 
 		Set<String> keySet = new HashSet<>(Arrays.asList("string", "int", "float", "bool", "null", "list"));
 		Assert.assertEquals("Unexpected keyset", keySet, innerobj.getKeys());
@@ -37,10 +37,10 @@ public class TestJsonParser {
 		Assert.assertEquals("Incorrect value for key 'bool'", "true", innerobj.get("bool").serialize(0));
 		Assert.assertEquals("Incorrect value for key 'null'", "null", innerobj.get("null").serialize(0));
 
-		Assert.assertEquals("Incorrect int/float conversion", 1.0, innerobj.get("int").getFloatValue().value, 0);
-		Assert.assertEquals("Incorrect int/float conversion", 1, innerobj.get("int").getIntValue().value, 0);
-		Assert.assertEquals("Incorrect int/float conversion", 1.123, innerobj.get("float").getFloatValue().value, 0);
-		Assert.assertEquals("Incorrect int/float conversion", 1, innerobj.get("float").getIntValue().value, 0);
+		Assert.assertEquals("Incorrect int/float conversion", 1.0, innerobj.get("int").getDouble(), 0);
+		Assert.assertEquals("Incorrect int/float conversion", 1, innerobj.get("int").getInt(), 0);
+		Assert.assertEquals("Incorrect int/float conversion", 1.123, innerobj.get("float").getDouble(), 0);
+		Assert.assertEquals("Incorrect int/float conversion", 1, innerobj.get("float").getInt(), 0);
 
 		Assert.assertTrue("Incorrect list object value type", innerobj.get("list") instanceof JsonList);
 

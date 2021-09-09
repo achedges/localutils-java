@@ -13,7 +13,12 @@ public class JsonBoolean extends JsonElement {
 	}
 
 	@Override
-	public JsonBoolean getBoolValue() {
+	public JsonBoolean getBoolElement() {
 		return this;
+	}
+
+	@Override
+	public Boolean getBool() {
+		return this.value;
 	}
 }

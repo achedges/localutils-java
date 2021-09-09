@@ -13,7 +13,12 @@ public class JsonString extends JsonElement {
 	}
 
 	@Override
-	public JsonString getStringValue() {
+	public JsonString getStringElement() {
 		return this;
+	}
+
+	@Override
+	public String getString() {
+		return this.value;
 	}
 }

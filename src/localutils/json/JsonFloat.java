@@ -13,12 +13,22 @@ public class JsonFloat extends JsonElement {
 	}
 
 	@Override
-	public JsonFloat getFloatValue() {
+	public JsonFloat getFloatElement() {
 		return this;
 	}
 
 	@Override
-	public JsonInteger getIntValue() {
+	public JsonInteger getIntElement() {
 		return new JsonInteger((int)value);
+	}
+
+	@Override
+	public Double getDouble() {
+		return this.value;
+	}
+
+	@Override
+	public Integer getInt() {
+		return (int)this.value;
 	}
 }
