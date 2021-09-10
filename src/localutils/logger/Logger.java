@@ -46,6 +46,7 @@ public class Logger implements AutoCloseable {
 			log("Closing log file...");
 			log.flush();
 			log.close();
+			log = null;
 		}
 	}
 
