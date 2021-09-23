@@ -37,7 +37,7 @@ public class Logger implements AutoCloseable {
 		if (!logDirectory.exists())
 			Files.createDirectory(Paths.get(logFilePath));
 
-		log = new BufferedWriter(new FileWriter(Paths.get(logFilePath, logFileName).toString()));
+		log = new BufferedWriter(new FileWriter(Paths.get(logFilePath, logFileName).toString()), 256); // use a small buffer so log entries show up quicker
 	}
 
 	@Override
