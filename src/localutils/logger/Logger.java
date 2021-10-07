@@ -50,14 +50,19 @@ public class Logger implements AutoCloseable {
 		}
 	}
 
-	public void log(String msg) throws Exception {
+	public void log(String msg) {
 		log(msg, false);
 	}
 
-	public void log(String msg, boolean toConsole) throws Exception {
-		log.write(String.format("%s%n", msg));
-		if (toConsole)
+	public void log(String msg, boolean toConsole) {
+		try {
+			log.write(String.format("%s%n", msg));
+			if (toConsole)
+				System.out.println(msg);
+		} catch (Exception ex) {
 			System.out.println(msg);
+			System.out.printf("%s exception: %s%n", getClass().getName(), ex.getMessage());
+		}
 	}
 
 }
