@@ -1,3 +1,0 @@
-Testing log entry only
-Testing log entry with console echo
-Closing log file...
