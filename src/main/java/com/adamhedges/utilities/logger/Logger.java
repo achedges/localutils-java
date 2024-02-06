@@ -67,9 +67,12 @@ public class Logger implements AutoCloseable {
                 now = now.withZoneSameInstant(timestampZoneId);
             }
 
-			log.write(String.format("%s %s%n", logTimestampFormatter.format(now), msg));
-			if (toConsole)
-				System.out.println(msg);
+            String message = String.format("%-32s %s", logTimestampFormatter.format(now), msg);
+			log.write(String.format("%s%n", message));
+
+			if (toConsole) {
+                System.out.println(message);
+            }
 		} catch (Exception ex) {
 			System.out.println(msg);
 			System.out.printf("%s exception: %s%n", getClass().getName(), ex.getMessage());
