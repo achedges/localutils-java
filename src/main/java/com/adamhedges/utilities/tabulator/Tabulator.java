@@ -29,20 +29,16 @@ public class Tabulator {
 		StringBuilder header = new StringBuilder("\n");
 		int headerwidth = 0;
 
-		for (ColumnDefinition def : columnDefinitions)
-		{
+		for (ColumnDefinition def : columnDefinitions) {
 			String s = def.getJustifiedValue(def.name);
 			header.append(s);
 			headerwidth += s.length();
 		}
 
 		header.append("\n");
-
-		for (int i = 0; i < headerwidth; i++)
-			header.append('-');
+        header.append("-".repeat(Math.max(0, headerwidth)));
 
 		return header.toString();
-
 	}
 
 	public String toTable(List<List<String>> records) {
