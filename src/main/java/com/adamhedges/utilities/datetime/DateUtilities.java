@@ -28,6 +28,16 @@ public class DateUtilities {
 		return ZonedDateTime.of(date, time, timeZoneIdMap.get(tz)).toLocalDateTime();
 	}
 
+    public static long getInstantDate(Instant instant, Timezone tz) {
+        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, timeZoneIdMap.get(tz));
+        return (dt.getYear() * 10000L) + (dt.getMonthValue() * 100) + dt.getDayOfMonth();
+    }
+
+    public static int getInstantTime(Instant instant, Timezone tz) {
+        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, timeZoneIdMap.get(tz));
+        return (dt.getHour() * 100) + dt.getMinute();
+    }
+
 	public static LocalDateTime getEasternDateTime() {
 		return getDateTime(Timezone.Eastern);
 	}
