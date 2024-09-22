@@ -5,14 +5,9 @@ import java.util.HashMap;
 
 public class DateUtilities {
 
-	private static final HashMap<Timezone, ZoneId> timeZoneIdMap;
-
-    static {
-        timeZoneIdMap = new HashMap<>();
-        timeZoneIdMap.put(Timezone.Central, ZoneId.of("America/Chicago"));
-        timeZoneIdMap.put(Timezone.Eastern, ZoneId.of("America/New_York"));
-        timeZoneIdMap.put(Timezone.Universal, ZoneId.of("UTC"));
-    }
+	public static final ZoneId CENTRAL_TIMEZONE = ZoneId.of("America/Chicago");
+    public static final ZoneId EASTERN_TIMEZONE = ZoneId.of("America/New_York");
+    public static final ZoneId UTC_TIMEZONE = ZoneId.of("UTC");
     
     private DateUtilities() {}
 
@@ -20,42 +15,46 @@ public class DateUtilities {
 		return LocalDateTime.now();
 	}
 
-	public static LocalDateTime getDateTime(Timezone tz) {
-		return ZonedDateTime.now(timeZoneIdMap.get(tz)).toLocalDateTime();
+	public static LocalDateTime getDateTime(ZoneId tz) {
+		return ZonedDateTime.now(tz).toLocalDateTime();
 	}
 
-	public static LocalDateTime getDateTime(LocalDate date, LocalTime time, Timezone tz) {
-		return ZonedDateTime.of(date, time, timeZoneIdMap.get(tz)).toLocalDateTime();
+	public static LocalDateTime getDateTime(LocalDate date, LocalTime time, ZoneId tz) {
+		return ZonedDateTime.of(date, time, tz).toLocalDateTime();
 	}
 
-    public static long getInstantDate(Instant instant, Timezone tz) {
-        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, timeZoneIdMap.get(tz));
+    public static Instant getZonedNowInstant(ZoneId tz) {
+        return ZonedDateTime.now(tz).toInstant();
+    }
+
+    public static long getInstantDate(Instant instant, ZoneId tz) {
+        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, tz);
         return (dt.getYear() * 10000L) + (dt.getMonthValue() * 100) + dt.getDayOfMonth();
     }
 
-    public static int getInstantTime(Instant instant, Timezone tz) {
-        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, timeZoneIdMap.get(tz));
+    public static int getInstantTime(Instant instant, ZoneId tz) {
+        ZonedDateTime dt = ZonedDateTime.ofInstant(instant, tz);
         return (dt.getHour() * 100) + dt.getMinute();
     }
 
 	public static LocalDateTime getEasternDateTime() {
-		return getDateTime(Timezone.Eastern);
+		return getDateTime(EASTERN_TIMEZONE);
 	}
 
 	public static LocalDateTime getCentralDateTime() {
-		return getDateTime(Timezone.Central);
+		return getDateTime(CENTRAL_TIMEZONE);
 	}
 
 	public static LocalDateTime getUniversalDateTime() {
-		return getDateTime(Timezone.Universal);
+		return getDateTime(UTC_TIMEZONE);
 	}
 
 	public static LocalDateTime parse(String dateTimeString) {
 		return ZonedDateTime.parse(dateTimeString).toLocalDateTime();
 	}
 
-	public static LocalDateTime parseToZone(String dateTimeString, Timezone tz) {
-		return ZonedDateTime.parse(dateTimeString).withZoneSameInstant(timeZoneIdMap.get(tz)).toLocalDateTime();
+	public static LocalDateTime parseToZone(String dateTimeString, ZoneId tz) {
+		return ZonedDateTime.parse(dateTimeString).withZoneSameInstant(tz).toLocalDateTime();
 	}
 
 }
