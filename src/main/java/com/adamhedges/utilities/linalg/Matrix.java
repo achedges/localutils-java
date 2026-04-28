@@ -42,6 +42,10 @@ public class Matrix {
         return newMatrix;
     }
 
+    public boolean isSquare() {
+        return n == m;
+    }
+
     public Optional<Double> at(int row, int column) {
         if (row >= n || column >= m) {
             return Optional.empty();
@@ -50,7 +54,7 @@ public class Matrix {
         return Optional.of(matrix[row][column]);
     }
 
-    public Matrix multiply(Matrix other) {
+    public Matrix dot(Matrix other) {
         if (other.n != this.m) {
             throw new RuntimeException(
                 String.format("Matrices not aligned - this[%s][%s] -vs- other[%s][%s]", this.n, this.m, other.n, other.m)
@@ -79,6 +83,45 @@ public class Matrix {
             }
         }
         return result;
+    }
+
+    public static Optional<Double> determinant(Matrix matrix) {
+        if (!matrix.isSquare()) {
+            return Optional.empty();
+        }
+
+        if (matrix.n == 1) {
+            return matrix.at(0, 0);
+        }
+
+        if (matrix.n == 2) {
+            double a = matrix.at(0, 0).orElse(0.0);
+            double b = matrix.at(0, 1).orElse(0.0);
+            double c = matrix.at(1, 0).orElse(0.0);
+            double d = matrix.at(1, 1).orElse(0.0);
+            return Optional.of((a * d) - (b * c));
+        }
+
+        double determinant = 0;
+        for (int col = 0; col < matrix.m; col++) {
+            Matrix subMatrix = Matrix.initEmpty(matrix.n - 1, matrix.m - 1);
+            int currentRow = 0;
+            int currentCol = 0;
+            for (int r = 1; r < matrix.n; r++) {
+                for (int c = 0; c < matrix.m; c++) {
+                    if (c != col) {
+                        subMatrix.matrix[currentRow][currentCol++] = matrix.matrix[r][c];
+                    }
+                }
+                currentRow++;
+                currentCol = 0;
+            }
+
+            int negation = col % 2 == 0 ? 1 : -1;
+            determinant += matrix.matrix[0][col] * Matrix.determinant(subMatrix).orElse(0.0) * negation;
+        }
+
+        return Optional.of(determinant);
     }
 
 }
