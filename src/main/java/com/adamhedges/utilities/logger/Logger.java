@@ -20,6 +20,8 @@ public class Logger implements AutoCloseable {
 	private final DateTimeFormatter fileNameDtFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss_n");
     private final DateTimeFormatter logTimestampFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
+    private final boolean immediateFlush;
+
 	private BufferedWriter log;
 
 	public Logger() throws Exception {
@@ -27,6 +29,7 @@ public class Logger implements AutoCloseable {
 		logFilePrefix = "log";
 		logFileName = String.format("%s_%s.txt", logFilePrefix, LocalDateTime.now().format(fileNameDtFormatter));
         timestampZoneId = null;
+        immediateFlush = true;
 		initializeLogFile();
 	}
 
@@ -35,6 +38,7 @@ public class Logger implements AutoCloseable {
 		logFilePrefix = filePrefix;
 		logFileName = String.format("%s_%s.txt", logFilePrefix, LocalDateTime.now().format(fileNameDtFormatter));
         this.timestampZoneId = timestampZoneId;
+        immediateFlush = true;
 		initializeLogFile();
 	}
 
@@ -67,8 +71,12 @@ public class Logger implements AutoCloseable {
                 now = now.withZoneSameInstant(timestampZoneId);
             }
 
-            String message = String.format("%-32s %s", logTimestampFormatter.format(now), msg);
+            String message = String.format("%-28s %s", logTimestampFormatter.format(now), msg);
 			log.write(String.format("%s%n", message));
+
+            if (immediateFlush) {
+                log.flush();
+            }
 
 			if (toConsole) {
                 System.out.println(message);
