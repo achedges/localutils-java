@@ -18,7 +18,7 @@ public class Logger implements AutoCloseable {
     public final ZoneId timestampZoneId;
 
 	private final DateTimeFormatter fileNameDtFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss_n");
-    private final DateTimeFormatter logTimestampFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+    private final DateTimeFormatter logTimestampFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSZ");
 
     private final boolean immediateFlush;
 
@@ -71,7 +71,7 @@ public class Logger implements AutoCloseable {
                 now = now.withZoneSameInstant(timestampZoneId);
             }
 
-            String message = String.format("%-28s %s", logTimestampFormatter.format(now), msg);
+            String message = String.format("%s %s", logTimestampFormatter.format(now), msg);
 			log.write(String.format("%s%n", message));
 
             if (immediateFlush) {
